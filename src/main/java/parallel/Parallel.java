@@ -6,12 +6,7 @@ import java.util.ArrayList;
 
 public class Parallel {
     private final int THREAD_COUNT = 2;
-    private Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            System.out.println("오버라이딩 안하면 찍힌다. parallel runnable default sout");
-        }
-    };
+    private Runnable runnable;
 
     public Parallel(Runnable runnable) {
         this.runnable = runnable;

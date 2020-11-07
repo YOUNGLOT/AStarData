@@ -29,52 +29,55 @@ public class AStarDao extends EntityDao<AStar> {
     protected AStar readEntity(ResultSet resultSet) throws SQLException {
         AStar entity = new AStar();
 
-        entity.setAStarId(resultSet.getInt(1));
-        entity.setMixTime(resultSet.getInt(2));
-        entity.setOperationCount(resultSet.getInt(3));
-        entity.setResultCount(resultSet.getInt(4));
+        entity.setASTAR_ID(resultSet.getInt(1));
+        entity.setMIX_COUNT(resultSet.getInt(2));
+        entity.setOPERATION_COUNT(resultSet.getInt(3));
+        entity.setRESULT_COUNT(resultSet.getInt(4));
+        entity.setHEURISTIC_WEIGHT(resultSet.getInt(5));
 
         return entity;
     }
 
     @Override
     public boolean update(final AStar entity) throws SQLException {
-        String query = "update ASTAR set MixTime = ?, OperationCount = ?, ResultCount = ? where AStarId = ?";
+        String query = "update ASTAR set MIX_COUNT = ?, OPERATION_COUNT = ?, RESULT_COUNT = ?, HEURISTIC_WEIGHT = ? where ASTAR_ID = ?";
 
         return execute(query, new ParameterSetter() {
             @Override
             public void setValue(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setInt(1, entity.getMixTime());
-                preparedStatement.setInt(2, entity.getOperationCount());
-                preparedStatement.setInt(3, entity.getResultCount());
-                preparedStatement.setInt(4, entity.getAStarId());
+                preparedStatement.setInt(1, entity.getMIX_COUNT());
+                preparedStatement.setInt(2, entity.getOPERATION_COUNT());
+                preparedStatement.setInt(3, entity.getRESULT_COUNT());
+                preparedStatement.setInt(4, entity.getHEURISTIC_WEIGHT());
+                preparedStatement.setInt(5, entity.getASTAR_ID());
             }
         });
     }
 
     @Override
     public boolean insert(final AStar entity) throws SQLException {
-        String query = "insert into AStar values (?, ?, ?)";
+        String query = "insert into ASTAR values (?, ?, ?, ?)";
 
         return execute(query, new ParameterSetter() {
             @Override
             public void setValue(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setInt(1, entity.getMixTime());
-                preparedStatement.setInt(2, entity.getOperationCount());
-                preparedStatement.setInt(3, entity.getResultCount());
+                preparedStatement.setInt(1, entity.getMIX_COUNT());
+                preparedStatement.setInt(2, entity.getOPERATION_COUNT());
+                preparedStatement.setInt(3, entity.getRESULT_COUNT());
+                preparedStatement.setInt(4, entity.getHEURISTIC_WEIGHT());
             }
         });
     }
 
     @Override
     public int getCount() throws SQLException {
-        String query = "select count(*) from AStar";
+        String query = "select count(*) from ASTAR";
         return getInt(query, null);
     }
 
     @Override
     public ArrayList<AStar> getAll() throws SQLException {
-        String query = "select * from AStar";
+        String query = "select * from ASTAR";
         return getMany(query, null);
     }
 }

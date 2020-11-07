@@ -14,7 +14,7 @@ public class AStarAlgorithm {
     private int[][] resultArray;
 
     private int operationCount = 0; //  Queue 에 offer 될 때 마다 1씩 증가 (만들어진 경우의 수)
-
+    private int heuristicWeight;
     //  우선순위 큐
     private final PriorityQueue<Data> priorityQueue = new PriorityQueue<Data>(new Comparator<Data>() {
         //  큐 내부에서 우선순위를 매길 때 사용하는 함수
@@ -55,7 +55,7 @@ public class AStarAlgorithm {
                 resultArray = array2;
             }
             //  점수의 차 를 return
-            return (score1 + key1.length() / 5) - (score2 + key2.length() / 5);
+            return (score1 + key1.length() / heuristicWeight) - (score2 + key2.length() / heuristicWeight);
             //return score1 - score2 + Math.pow(key1.)
         }
 
@@ -90,11 +90,12 @@ public class AStarAlgorithm {
     };
 
     //  생성자
-    public AStarAlgorithm(int[][] goalArray, int[][] inputArray) {
+    public AStarAlgorithm(int[][] goalArray, int[][] inputArray, int heuristicWeight) {
         //  인풋값으로 필드 생성
         GOAL_ARRAY = goalArray;
         //  큐에 처음에 실행 될 Input_Array를 넣는다 (Key = 5 는 unique한 숫자라 넣음)
         priorityQueue.offer(new Data("5", inputArray));
+        this.heuristicWeight = heuristicWeight;
     }
 
     public static void main(String[] args) {
@@ -137,7 +138,7 @@ public class AStarAlgorithm {
         int[][] goalArray = {{10, 5, 8, 4}, {1, 12, 9, 3}, {13, 15, 2, 6}, {7, 0, 14, 11}};
 
         //  객체 생성
-        AStarAlgorithm enhancedAStar = new AStarAlgorithm(goalArray, inputArray);
+        AStarAlgorithm enhancedAStar = new AStarAlgorithm(goalArray, inputArray, 5);
         enhancedAStar.solve();
     }
 
@@ -197,6 +198,7 @@ public class AStarAlgorithm {
             printProcess_Recursive();
         }
     }
+
     //  DB에 넣는 작업을 할 solve Method (추출될 값 들을 핸들링 해야 해서 따로 만듬)
     public AStar getOperationCount_ResultCount() {
         //  Queue에 처리 할 값이 있고, 결과값이 없을 때 : 반복

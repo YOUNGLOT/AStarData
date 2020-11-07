@@ -14,9 +14,10 @@ public class DataBaseTest {
     private void insertTest() throws SQLException {
         AStar entity = new AStar();
 
-        entity.setMixTime(1);
-        entity.setOperationCount(1);
-        entity.setResultCount(1);
+        entity.setMIX_COUNT(1);
+        entity.setOPERATION_COUNT(1);
+        entity.setRESULT_COUNT(1);
+        entity.setHEURISTIC_WEIGHT(1);
 
         AStarDao.getInstance().insert(entity);
     }
