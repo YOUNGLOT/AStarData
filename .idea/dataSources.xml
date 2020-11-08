@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="ASTAR@192.168.219.101" uuid="d1bf79ad-ca9e-4bd2-b909-e698877b4d88">
+    <data-source source="LOCAL" name="MYASTAR@192.168.219.101" uuid="d1bf79ad-ca9e-4bd2-b909-e698877b4d88">
       <driver-ref>sqlserver.ms</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
-      <jdbc-url>jdbc:sqlserver://192.168.219.101:1433;database=ASTAR</jdbc-url>
+      <jdbc-url>jdbc:sqlserver://192.168.219.101:1433;database=MYASTAR</jdbc-url>
     </data-source>
   </component>
 </project>

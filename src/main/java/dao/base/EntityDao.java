@@ -26,11 +26,13 @@ public abstract class EntityDao<E> {
 
     public abstract ArrayList<E> getAll() throws SQLException;
 
+    //  return 값이 하나일 때
     protected final E getOne(String query, ParameterSetter parameterSetter) throws SQLException {
         ArrayList<E> entities = getMany(query, parameterSetter);
         return (entities.size() == 0) ? null : entities.get(0);
     }
 
+    //  return 값이 여러개 일 때
     protected final ArrayList<E> getMany(String query, ParameterSetter parameterSetter) throws SQLException {
         Connection connection = getConnection();
 
@@ -82,12 +84,12 @@ public abstract class EntityDao<E> {
         Connection connection = getConnection();
 
         PreparedStatement preparedStatement = connection.prepareStatement(query);
+
         if (parameterSetter != null)
             parameterSetter.setValue(preparedStatement);
 
         int rowCount = preparedStatement.executeUpdate();
 
-        preparedStatement.getConnection().close();
         preparedStatement.close();
         connection.close();
 

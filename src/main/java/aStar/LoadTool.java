@@ -34,9 +34,9 @@ public class LoadTool {
         //parallel.parallel();
         int oufOfMemortCount = 0;
         //  i = mixCount => 10 ~ 80 까지 10씩 증가
-        for (int i = 10; i <= 80; i += 10) {
+        for (int i = 80; i <= 100; i += 10) {
             //  단순히 k 번을 반복
-            for (int k = 0; k < 1000; k++) {
+            for (int k = 0; k < 300; k++) {
                 //  heuristicCount 를 1 ~ 50 까지 대입함
                 for (int j = 1; j <= 50; j++) {
                     solve(i, j, oufOfMemortCount);

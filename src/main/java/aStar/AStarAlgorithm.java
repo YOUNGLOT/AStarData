@@ -16,19 +16,11 @@ public class AStarAlgorithm {
     private int operationCount = 0; //  Queue 에 offer 될 때 마다 1씩 증가 (만들어진 경우의 수)
     private int heuristicWeight;
     //  우선순위 큐
-    private final PriorityQueue<Data> priorityQueue = new PriorityQueue<Data>(new Comparator<Data>() {
+    private final PriorityQueue<Data> PRIORITYQUEUE = new PriorityQueue<Data>(new Comparator<Data>() {
+        //  region Comparator 인터페이스 구현
         //  큐 내부에서 우선순위를 매길 때 사용하는 함수
         @Override
         public int compare(Data data1, Data data2) {
-            //  두 Data 를 비교해 우선순위 를 int 값으로 return
-            int score = getTriageScore_Difference(data1, data2);
-            //  2증 삼항 연산자 사용해 봤습니다.
-            return (score == 0) ? 0 : (score > 0) ? 1 : -1;
-        }
-
-        //  원래 1개의 Data에 맞는 TriageScore를 Return 하였으나 , 2중 for문이 있기 때문에 Triage의 비교에 사용 할 때 한번에 두 값을 get
-        //  우선순위를 평가 할 점수의 차 를 return 하는 Method
-        private int getTriageScore_Difference(Data data1, Data data2) {
             //  데이터 분리
             String key1 = data1.getKey(), key2 = data2.getKey();
             int[][] array1 = data1.getArray(), array2 = data2.getArray();
@@ -54,13 +46,12 @@ public class AStarAlgorithm {
                 resultKey = key2;
                 resultArray = array2;
             }
-            //  점수의 차 를 return
-            return (score1 + key1.length() / heuristicWeight) - (score2 + key2.length() / heuristicWeight);
-            //return score1 - score2 + Math.pow(key1.)
+
+            int score = (score1 + key1.length() / heuristicWeight) - (score2 + key2.length() / heuristicWeight);
+            //  2증 삼항 연산자 사용해 봤습니다.
+            return (score == 0) ? 0 : (score > 0) ? 1 : -1;
         }
-
         //endregion
-
     }) {
         //   중복값 확인 Set (Queue 필드)
         private final Set<Integer> data_ArrayHashCodeSet = new HashSet<>();
@@ -94,7 +85,7 @@ public class AStarAlgorithm {
         //  인풋값으로 필드 생성
         GOAL_ARRAY = goalArray;
         //  큐에 처음에 실행 될 Input_Array를 넣는다 (Key = 5 는 unique한 숫자라 넣음)
-        priorityQueue.offer(new Data("5", inputArray));
+        PRIORITYQUEUE.offer(new Data("5", inputArray));
         this.heuristicWeight = heuristicWeight;
     }
 
@@ -144,10 +135,10 @@ public class AStarAlgorithm {
 
     public void solve() {
         //  Queue에 처리 할 값이 있고, 결과값이 없을 때 : 반복
-        while (priorityQueue.size() != 0 && resultKey.length() == 1) {
+        while (PRIORITYQUEUE.size() != 0 && resultKey.length() == 1) {
             //  Data 를 Peek!!!!
-            Data data = priorityQueue.peek();
-            priorityQueue.remove(data);
+            Data data = PRIORITYQUEUE.peek();
+            PRIORITYQUEUE.remove(data);
 
             String key = data.getKey();
             int[][] array = data.getArray();
@@ -173,19 +164,19 @@ public class AStarAlgorithm {
             //  상
             if (y - 1 >= 0 && !lastLet.equals("3")) {   //  움직일 수 없거나, 이전 작업과 반대되는 작업을 피하는 조건문
                 //  Array를 만들고 triageMap에 넣는 작업     *offer() 함수를 Overriding 해서 중복 제거를 함
-                priorityQueue.offer(new Data(key + "1", getMovedArray(x, y, x, y - 1, array)));
+                PRIORITYQUEUE.offer(new Data(key + "1", getMovedArray(x, y, x, y - 1, array)));
             }
             //  우
             if (x + 1 < array.length && !lastLet.equals("4")) {
-                priorityQueue.offer(new Data(key + "2", getMovedArray(x, y, x + 1, y, array)));
+                PRIORITYQUEUE.offer(new Data(key + "2", getMovedArray(x, y, x + 1, y, array)));
             }
             //  하
             if (y + 1 < array.length && !lastLet.equals("1")) {
-                priorityQueue.offer(new Data(key + "3", getMovedArray(x, y, x, y + 1, array)));
+                PRIORITYQUEUE.offer(new Data(key + "3", getMovedArray(x, y, x, y + 1, array)));
             }
             //  좌
             if (x - 1 >= 0 && !lastLet.equals("2")) {
-                priorityQueue.offer(new Data(key + "4", getMovedArray(x, y, x - 1, y, array)));
+                PRIORITYQUEUE.offer(new Data(key + "4", getMovedArray(x, y, x - 1, y, array)));
             }
         }
         //  결과를 출력
@@ -202,10 +193,10 @@ public class AStarAlgorithm {
     //  DB에 넣는 작업을 할 solve Method (추출될 값 들을 핸들링 해야 해서 따로 만듬)
     public AStar getOperationCount_ResultCount() {
         //  Queue에 처리 할 값이 있고, 결과값이 없을 때 : 반복
-        while (priorityQueue.size() != 0 && resultKey.length() == 1) {
+        while (PRIORITYQUEUE.size() != 0 && resultKey.length() == 1) {
             //  Data 를 Peek!!!!
-            Data data = priorityQueue.peek();
-            priorityQueue.remove(data);
+            Data data = PRIORITYQUEUE.peek();
+            PRIORITYQUEUE.remove(data);
 
             //  Key 와 Array 를 분리
             String key = data.getKey();
@@ -231,16 +222,16 @@ public class AStarAlgorithm {
             // {상, 우, 하, 좌} 로 빈 공간이 이동한 경우
             if (y - 1 >= 0 && !lastLet.equals("3")) {   //  움직일 수 없거나, 이전 작업과 반대되는 작업을 피하는 조건문
                 //  Array를 만들고 triageMap에 넣는 작업     *offer() 함수를 Overriding 해서 중복 제거를 함
-                priorityQueue.offer(new Data(key + "1", getMovedArray(x, y, x, y - 1, array)));
+                PRIORITYQUEUE.offer(new Data(key + "1", getMovedArray(x, y, x, y - 1, array)));
             } //상
             if (x + 1 < array.length && !lastLet.equals("4")) {
-                priorityQueue.offer(new Data(key + "2", getMovedArray(x, y, x + 1, y, array)));
+                PRIORITYQUEUE.offer(new Data(key + "2", getMovedArray(x, y, x + 1, y, array)));
             } //우
             if (y + 1 < array.length && !lastLet.equals("1")) {
-                priorityQueue.offer(new Data(key + "3", getMovedArray(x, y, x, y + 1, array)));
+                PRIORITYQUEUE.offer(new Data(key + "3", getMovedArray(x, y, x, y + 1, array)));
             } //하
             if (x - 1 >= 0 && !lastLet.equals("2")) {
-                priorityQueue.offer(new Data(key + "4", getMovedArray(x, y, x - 1, y, array)));
+                PRIORITYQUEUE.offer(new Data(key + "4", getMovedArray(x, y, x - 1, y, array)));
             } //좌
         }
         return new AStar(operationCount, resultKey.length());

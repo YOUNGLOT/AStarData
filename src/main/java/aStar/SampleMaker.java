@@ -1,7 +1,5 @@
 package aStar;
 
-import lombok.Data;
-
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -9,14 +7,14 @@ import java.util.Set;
 public class SampleMaker {
     private int[][] array1; //  inputArray가 될 array
     private int[][] array2; //  goalArray가 될 array
-    private final int exBehaveKeyNum = 4;   //  중복제거를 위해 이전 mix의 방향을 갖고 있을 변수
+    private final int exBehaveNum = 4;   //  중복제거를 위해 이전 mix의 방향을 갖고 있을 변수
 
     private final Set<int[][]> arraySet = new HashSet<>();  //  중복제거 이전 기록을 갖고있는 Set
 
     public static void main(String[] args) {
-        int input = 4;          //  축의 크기가 4인 배열
+        int arraySize = 4;          //  축의 크기가 4인 배열
         int mixCount = 10000;     //  섞을 횟수
-        SampleMaker sampleMaker = new SampleMaker(input, mixCount);
+        SampleMaker sampleMaker = new SampleMaker(arraySize, mixCount);
         sampleMaker.getSample();    //  섞고
         sampleMaker.printArrays();  //  복사 붙여넣기 할 수 있게 출력
     }
@@ -28,14 +26,16 @@ public class SampleMaker {
     }
 
     //  필드에 2개의 Array를 생성하고 섞어주는 메소드
-    public SampleMaker(int input, int mixCount) {
-        array1 = new int[input][input];
-        int sequence = 0;
-        for (int i = 0; i < input; i++) {
-            for (int j = 0; j < input; j++) {
-                array1[j][i] = sequence++;
+    public SampleMaker(int arraySize, int mixCount) {
+        array1 = new int[arraySize][arraySize];
+
+        int arrayValue = 0;
+        for (int i = 0; i < arraySize; i++) {
+            for (int j = 0; j < arraySize; j++) {
+                array1[j][i] = arrayValue++;
             }
         }
+
         array1 = mixArray(array1);
         array2 = cloneArray(array1);
 
@@ -67,8 +67,9 @@ public class SampleMaker {
                 }
             }
         }
+
         //  오른쪽
-        if (direction == 0 && exBehaveKeyNum != 1) {
+        if (direction == 0 && exBehaveNum != 1) {
             if (x + 1 < array.length) {
                 int value = array[y][x + 1];
                 array[y][x] = value;
@@ -79,8 +80,9 @@ public class SampleMaker {
                 }
             }
         }
+
         //  왼쪽
-        if (direction == 1 && exBehaveKeyNum != 0) {
+        if (direction == 1 && exBehaveNum != 0) {
             if (x - 1 >= 0) {
                 int value = array[y][x - 1];
                 array[y][x] = value;
@@ -91,8 +93,9 @@ public class SampleMaker {
                 }
             }
         }
+
         //  아래
-        if (direction == 2 && exBehaveKeyNum != 3) {
+        if (direction == 2 && exBehaveNum != 3) {
             if (y + 1 < array.length) {
                 int value = array[y + 1][x];
                 array[y][x] = value;
@@ -103,8 +106,9 @@ public class SampleMaker {
                 }
             }
         }
+
         //  위
-        if (direction == 3 && exBehaveKeyNum != 2) {
+        if (direction == 3 && exBehaveNum != 2) {
             if (y - 1 >= 0) {
                 int value = array[y - 1][x];
                 array[y][x] = value;
@@ -115,15 +119,13 @@ public class SampleMaker {
                 }
             }
         }
+
         return array;
     }
 
     //  array 2개를 쌍으로 return해 주는 함수
     public Array_Array getSample() {
-        Array_Array array_array = new Array_Array();
-        array_array.setArray1(array1);
-        array_array.setArray2(array2);
-        return array_array;
+        return new Array_Array(array1, array2);
     }
 
     //  int[][] arrayName = {{1,2,3},{4,5,6}..........식으로 출력하는 함수!
@@ -149,9 +151,21 @@ public class SampleMaker {
 
 //  Array 2개를 쌍으로 전달 할 목적으로 만든 DataClass
 
-@Data
 class Array_Array {
     private int[][] array1;
     private int[][] array2;
+
+    public Array_Array(int[][] array1, int[][] array2) {
+        this.array1 = array1;
+        this.array2 = array2;
+    }
+
+    public int[][] getArray1() {
+        return array1;
+    }
+
+    public int[][] getArray2() {
+        return array2;
+    }
 
 }
